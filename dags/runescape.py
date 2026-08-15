@@ -58,7 +58,7 @@ def get_hiscores(user: dict) -> None:
     """Fetching and storing the RuneScape Hiscore data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
-    log.info(f"Fetching RuneScape Hiscore data for '{user.name}' ...")
+    log.info(f"Fetching RuneScape Hiscore data for '{user.name}': '{user.id}' ...")
 
     url = "https://secure.runescape.com/m=hiscore/index_lite.ws"
     params = {
@@ -68,7 +68,7 @@ def get_hiscores(user: dict) -> None:
     try:
         response = requests.get(url=url, params=params, timeout=30)
         if response.status_code != 200:
-            log.warning(f"Non-200 response ({response.status_code}) for user '{user.id}' ...")
+            log.warning(f"Non-200 response ({response.status_code}) for user '{user.name}': '{user.id}' ...")
         with get_db_session(engine_url=engine_url) as session:
             nhe = IngestHiscoresT(
                 user_id=user.id,
@@ -79,10 +79,10 @@ def get_hiscores(user: dict) -> None:
             session.add(nhe)
             session.commit()
 
-            log.info(f"Inserted new Hiscore records for user '{user.id}' ...")
+            log.info(f"Inserted new Hiscore records for user '{user.name}': '{user.id}' ...")
 
     except requests.exceptions.RequestException as e:
-        raise AirflowSkipException(f"Error while fetching RuneScape Hiscore data for '{user.id}': {e} ...")
+        raise AirflowSkipException(f"Error while fetching RuneScape Hiscore data for user '{user.name}': '{user.id}': {e} ...")
 
 
 @task.python
@@ -90,7 +90,7 @@ def get_runemetrics(user: dict) -> None:
     """Fetching and storing the RuneMetrics data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
-    log.info(f"Fetching RuneMetrics data for '{user.name}' ...")
+    log.info(f"Fetching RuneMetrics data for user '{user.name}': '{user.id}' ...")
 
     url = "https://apps.runescape.com/runemetrics/profile/profile"
     params = {
@@ -101,7 +101,7 @@ def get_runemetrics(user: dict) -> None:
     try:
         response = requests.get(url=url, params=params, timeout=30)
         if response.status_code != 200:
-            log.warning(f"Non-200 response ({response.status_code}) for user '{user.id}' ...")
+            log.warning(f"Non-200 response ({response.status_code}) for user '{user.name}': '{user.id}' ...")
         with get_db_session(engine_url=engine_url) as session:
             nre = IngestRuneMetricsT(
                 user_id=user.id,
@@ -112,10 +112,10 @@ def get_runemetrics(user: dict) -> None:
             session.add(nre)
             session.commit()
 
-            log.info(f"Inserted new RuneMetrics records for user '{user.id}' ...")
+            log.info(f"Inserted new RuneMetrics records for user '{user.name}': '{user.id}' ...")
 
     except requests.exceptions.RequestException as e:
-        raise AirflowSkipException(f"Error while fetching RuneMetrics data for '{user.id}': {e} ...")
+        raise AirflowSkipException(f"Error while fetching RuneMetrics data for '{user.name}': '{user.id}': {e} ...")
 
 
 with DAG(
