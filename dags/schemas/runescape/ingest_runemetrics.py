@@ -7,6 +7,7 @@ from schemas.base import Base
 
 
 class IngestRuneMetricsT(Base):
+    __tablename__ = 'ingest_runemetrics'
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID,

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import UUID, text, String, TIMESTAMP, Boolean, Integer
+from sqlalchemy import UUID, text, String, TIMESTAMP, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 import uuid
 
@@ -7,6 +7,7 @@ from schemas.base import Base
 
 
 class IngestHiscoresT(Base):
+    __tablename__ = "ingest_hiscores"
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID,
