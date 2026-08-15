@@ -1,0 +1,15 @@
+dags:
+  gitSync:
+    enabled: true
+    repo: https://github.com/Toasted-ctrl/afs.git
+    branch: master
+    subPath: "dags"
+    wait: 60
+
+ingress:
+  apiServer:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - name: YOUR INTERNAL HOSTNAME HERE
+    path: /
