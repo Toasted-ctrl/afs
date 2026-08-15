@@ -3,6 +3,7 @@ This is a collection of Apache Airflow DAGs I run in my personal environment. Ov
 
 ## Tech Stack
 - Apache Airflow
+- Kubernetes
 
 ## Contributing
 PRs welcome!
