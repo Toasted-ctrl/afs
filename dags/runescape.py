@@ -43,6 +43,7 @@ def get_tracked_users() -> list[dict]:
         )
         if not users:
             raise AirflowSkipException(f"No users found in '{TrackedUsersT.__tablename__}'. Shutting down ... ")
+        log.info(f"Found {len(users)} user(s), returning all ...")
         return [
             TrackedUser(
                 name=user.player_name,
