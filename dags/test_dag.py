@@ -28,6 +28,4 @@ with DAG(
     catchup=False
 ) as dag_daily:
 
-    tv = write_test_log()
-    log.info(f"Received test value: {tv}")
-    log.info("Shutting down test.")
+    write_test_log()
