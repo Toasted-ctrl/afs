@@ -11,3 +11,6 @@ wheels/
 
 # UV files
 uv.lock
+
+# k8s files
+airflow-values.yaml
