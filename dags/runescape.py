@@ -56,7 +56,7 @@ def get_tracked_users() -> list[TrackedUser]:
 @task.python
 def get_hiscores(user: dict):
     """Fetching and storing the RuneScape Hiscore data for the specified player."""
-    user = TrackedUser.from_dict(user)
+    user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
     log.debug(f"Fetching RuneScape Hiscore data for '{user.name}' ...")
 
@@ -71,7 +71,7 @@ def get_hiscores(user: dict):
             log.warning(f"Non-200 response ({response.status_code}) for user '{user.id}' ...")
         with get_db_session(engine_url=engine_url) as session:
             nhe = IngestHiscoresT(
-                user_id=uuid.UUID(user.id),
+                user_id=user.id,
                 status_code=response.status_code,
                 data=response.text if response.status_code == 200 else None
             )
@@ -88,7 +88,7 @@ def get_hiscores(user: dict):
 @task.python
 def get_runemetrics(user: dict):
     """Fetching and storing the RuneMetrics data for the specified player."""
-    user = TrackedUser.from_dict(user)
+    user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
     log.debug(f"Fetching RuneMetrics data for '{user.name}' ...")
 
@@ -104,7 +104,7 @@ def get_runemetrics(user: dict):
             log.warning(f"Non-200 response ({response.status_code}) for user '{user.id}' ...")
         with get_db_session(engine_url=engine_url) as session:
             nre = IngestRuneMetricsT(
-                user_id=uuid.UUID(user.id),
+                user_id=user.id,
                 status_code=response.status_code,
                 data=response.json() if response.status_code == 200 else None
             )
