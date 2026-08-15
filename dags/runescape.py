@@ -1,11 +1,12 @@
 from airflow import DAG
 from airflow.sdk import task
 from airflow.sdk.exceptions import AirflowSkipException
-from dataclasses import dataclass
 from datetime import datetime
 from logging import getLogger
 import requests
 import uuid
+
+from models.runescape.models import TrackedUser
 
 from schemas.runescape.ingest_hiscore import IngestHiscoresT
 from schemas.runescape.ingest_runemetrics import IngestRuneMetricsT
@@ -17,12 +18,6 @@ from shared.database.table_exists import ensure_table_exists
 
 
 log = getLogger(__name__)
-
-
-@dataclass(frozen=True)
-class TrackedUser:
-    name: str
-    id: str
 
 
 @task.python
@@ -53,14 +48,15 @@ def get_tracked_users() -> list[TrackedUser]:
             TrackedUser(
                 name=user.player_name,
                 id=user.id
-            )
+            ).to_dict()
             for user in users
         ]
 
 
 @task.python
-def get_hiscores(user: TrackedUser):
+def get_hiscores(user: dict):
     """Fetching and storing the RuneScape Hiscore data for the specified player."""
+    user = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
     log.debug(f"Fetching RuneScape Hiscore data for '{user.name}' ...")
 
@@ -90,8 +86,9 @@ def get_hiscores(user: TrackedUser):
 
 
 @task.python
-def get_runemetrics(user: TrackedUser):
+def get_runemetrics(user: dict):
     """Fetching and storing the RuneMetrics data for the specified player."""
+    user = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
     log.debug(f"Fetching RuneMetrics data for '{user.name}' ...")
 
