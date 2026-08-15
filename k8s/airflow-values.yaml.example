@@ -1,3 +1,7 @@
+extraEnvFrom: |
+  - secretRef:
+      name: airflow-db-credentials
+
 dags:
   gitSync:
     enabled: true
