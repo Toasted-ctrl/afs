@@ -1,0 +1,42 @@
+from datetime import datetime
+from sqlalchemy import UUID, text, String, TIMESTAMP, Boolean, Integer
+from sqlalchemy.orm import Mapped, mapped_column
+import uuid
+
+from schemas.base import Base
+
+
+class IngestHiscoresT(Base):
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID,
+        primary_key=True,
+        server_default=text("gen_random_uuid()")
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID,
+        nullable=False
+    )
+
+    status_code: Mapped[int] = mapped_column(
+        Integer,
+        nullable=True
+    )
+
+    data: Mapped[str] = mapped_column(
+        String(1000),
+        nullable=True
+    )
+
+    inserted_date: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text("now()")
+    )
+
+    inserted_by: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+        server_default=text("current_user")
+    )
