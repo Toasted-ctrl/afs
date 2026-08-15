@@ -31,7 +31,7 @@ def ensure_schemas():
 
 
 @task.python
-def get_tracked_users() -> list[TrackedUser]:
+def get_tracked_users() -> list[dict]:
     """Get tracked users. First determine if the table exists."""
     engine_url = get_engine_url(db_database="prod_runescape")
     with get_db_session(engine_url=engine_url) as session:
@@ -53,7 +53,7 @@ def get_tracked_users() -> list[TrackedUser]:
 
 
 @task.python
-def get_hiscores(user: dict):
+def get_hiscores(user: dict) -> None:
     """Fetching and storing the RuneScape Hiscore data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
@@ -85,7 +85,7 @@ def get_hiscores(user: dict):
 
 
 @task.python
-def get_runemetrics(user: dict):
+def get_runemetrics(user: dict) -> None:
     """Fetching and storing the RuneMetrics data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
