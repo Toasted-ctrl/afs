@@ -12,7 +12,7 @@ def ensure_table_exists(engine_url: str, schema: type[Base]) -> None:
     """Check if a table exists with the specified schema."""
     table_name = schema.__tablename__
 
-    log.debug(f"Inspecting if '{table_name}' exists ...")
+    log.info(f"Inspecting if '{table_name}' exists ...")
 
     engine = create_engine(url=engine_url)
 
@@ -20,12 +20,12 @@ def ensure_table_exists(engine_url: str, schema: type[Base]) -> None:
         inspector = inspect(engine)
         if not inspector.has_table(table_name=table_name):
             Base.metadata.create_all(bind=engine, tables=[schema.__table__])
-            log.debug(f"Table '{table_name}' did not exist, created ...")
+            log.info(f"Table '{table_name}' did not exist, created ...")
         else:
-            log.debug(f"Table '{table_name}' already exists, skipping creation ...")
+            log.info(f"Table '{table_name}' already exists, skipping creation ...")
     except Exception as e:
         log.error(f"Error ensuring table '{table_name}' exists: {e} ...")
         raise
     finally:
         engine.dispose()
-        log.debug("Disposed database engine")
+        log.info("Disposed database engine")

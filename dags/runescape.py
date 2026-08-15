@@ -35,7 +35,7 @@ def get_tracked_users() -> list[dict]:
     """Get tracked users. First determine if the table exists."""
     engine_url = get_engine_url(db_database="prod_runescape")
     with get_db_session(engine_url=engine_url) as session:
-        log.debug("Fetching usernames ...")
+        log.info("Fetching usernames ...")
         users = (
             session.query(TrackedUsersT.player_name, TrackedUsersT.id)
             .filter(TrackedUsersT.is_tracked.is_(True))
@@ -57,7 +57,7 @@ def get_hiscores(user: dict) -> None:
     """Fetching and storing the RuneScape Hiscore data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
-    log.debug(f"Fetching RuneScape Hiscore data for '{user.name}' ...")
+    log.info(f"Fetching RuneScape Hiscore data for '{user.name}' ...")
 
     url = "https://secure.runescape.com/m=hiscore/index_lite.ws"
     params = {
@@ -78,7 +78,7 @@ def get_hiscores(user: dict) -> None:
             session.add(nhe)
             session.commit()
 
-            log.debug(f"Inserted new Hiscore records for user '{user.id}' ...")
+            log.info(f"Inserted new Hiscore records for user '{user.id}' ...")
 
     except requests.exceptions.RequestException as e:
         raise AirflowSkipException(f"Error while fetching RuneScape Hiscore data for '{user.id}': {e} ...")
@@ -89,7 +89,7 @@ def get_runemetrics(user: dict) -> None:
     """Fetching and storing the RuneMetrics data for the specified player."""
     user: TrackedUser = TrackedUser.from_dict(user)
     engine_url = get_engine_url(db_database="prod_runescape")
-    log.debug(f"Fetching RuneMetrics data for '{user.name}' ...")
+    log.info(f"Fetching RuneMetrics data for '{user.name}' ...")
 
     url = "https://apps.runescape.com/runemetrics/profile/profile"
     params = {
@@ -111,7 +111,7 @@ def get_runemetrics(user: dict) -> None:
             session.add(nre)
             session.commit()
 
-            log.debug(f"Inserted new RuneMetrics records for user '{user.id}' ...")
+            log.info(f"Inserted new RuneMetrics records for user '{user.id}' ...")
 
     except requests.exceptions.RequestException as e:
         raise AirflowSkipException(f"Error while fetching RuneMetrics data for '{user.id}': {e} ...")

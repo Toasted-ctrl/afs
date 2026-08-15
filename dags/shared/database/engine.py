@@ -25,10 +25,10 @@ def get_engine_url(
             f"Please double check the config."
         )
 
-    log.debug(f"Creating engine for database '{db_database}' ...")
+    log.info(f"Creating engine for database '{db_database}' ...")
 
     url = f"{db_dialect}+{db_driver}://{db_username}:{db_password}@{db_hostname}:{db_port}/{db_database}"
 
-    log.debug("Returning engine ...")
+    log.info("Returning engine ...")
 
     return url
