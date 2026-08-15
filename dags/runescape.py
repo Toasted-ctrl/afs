@@ -4,7 +4,6 @@ from airflow.sdk.exceptions import AirflowSkipException
 from datetime import datetime
 from logging import getLogger
 import requests
-import uuid
 
 from models.runescape.models import TrackedUser
 
