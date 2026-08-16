@@ -82,7 +82,7 @@ def get_and_transform_unprocessed_hiscore_records() -> None:
         session.commit()
         log.info(
             f"Done! Processed {records} records ... "
-            f"Added {lines} to '{StagingHiscoresT.__tablename__}' ..."
+            f"Added {lines} line(s) to '{StagingHiscoresT.__tablename__}' ..."
         )
 
 
