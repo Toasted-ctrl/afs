@@ -66,18 +66,18 @@ def get_and_transform_unprocessed_hiscore_records() -> None:
         records = 0
         lines = 0
 
-        for record in ud:
-            m = unpack_hiscore_entry(record.data)
+        for r in ud:
+            m = unpack_hiscore_entry(r.data)
             for item in m:
                 ni = StagingHiscoresT(
-                    user_id=record.user_id,
-                    ingested_date=record.inserted_date,
+                    user_id=r.user_id,
+                    ingested_date=r.inserted_date,
                     **asdict(item)
                 )
 
                 session.add(ni)
                 lines += 1
-            record += 1
+            records += 1
 
         session.commit()
         log.info(
