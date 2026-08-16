@@ -76,7 +76,7 @@ def get_and_transform_unprocessed_hiscore_records() -> None:
                 )
 
                 session.add(ni)
-                processed += 1
+                lines += 1
             record += 1
 
         session.commit()
