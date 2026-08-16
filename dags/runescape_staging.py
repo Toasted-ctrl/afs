@@ -35,7 +35,7 @@ def get_and_transform_unprocessed_hiscore_records() -> None:
         max_ingested_date = get_max_value_from_schema_by_column(
             session=session,
             schema=StagingHiscoresT,
-            column_name='inserted_date')
+            column_name='ingested_date')
 
         if not max_ingested_date:
             log.info(
