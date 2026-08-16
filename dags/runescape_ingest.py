@@ -5,7 +5,7 @@ from datetime import datetime
 from logging import getLogger
 import requests
 
-from models.runescape.models import TrackedUser
+from custom.runescape.models import TrackedUser
 
 from schemas.runescape.ingest_hiscore import IngestHiscoresT
 from schemas.runescape.ingest_runemetrics import IngestRuneMetricsT
