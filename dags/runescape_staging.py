@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.sdk import task
+from dataclasses import asdict
 from datetime import datetime
 from logging import getLogger
 
@@ -29,7 +30,6 @@ def ensure_schemas() -> None:
 
 @task.python
 def get_and_transform_unprocessed_hiscore_records() -> None:
-
     engine_url = get_engine_url(db_database="prod_runescape")
     with get_db_session(engine_url=engine_url) as session:
         max_ingested_date = get_max_value_from_schema_by_column(
@@ -72,7 +72,7 @@ def get_and_transform_unprocessed_hiscore_records() -> None:
                 ni = StagingHiscoresT(
                     user_id=record.user_id,
                     ingested_date=record.inserted_date,
-                    **item
+                    **asdict(item)
                 )
 
                 session.add(ni)
